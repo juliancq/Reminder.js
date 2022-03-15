@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <style>
+        
+        :root{
+
+            --primary : rgb(41, 51, 85);
+            --secondary : rgb(223, 215, 215);
+        }
+
+        *{
+            margin: 0;
+        }
+
+        html, body, #app{
+            min-height: 100vh;
+        }
+
+        .flex{
+
+            display: flex;
+        }
+
+        .w-100{
+
+            width: 100%;
+        }
+
+        #app{
+            
+        }
+
+        #navbar{
+            
+            width: 20%;
+            background-color: var(--primary);
+            display: flex;
+            color: white;
+            flex-direction:column;
+            gap: 30px;
+            align-items: center;
+        }
+
+        #nav-title{
+
+            justify-content: space-around;
+            padding: 50px 0 60px;
+            font-size: 30px;
+        }
+
+        #nav-item{
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+
+        #nav-item:hover{
+
+            cursor: pointer;
+
+        }
+
+        .selected-item{
+            border-top-left-radius: 200px 200px;
+            border-bottom-left-radius:200px 200px;
+            transform: translateX(50px);
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
+
+        #content{
+
+            width: 80%;
+            background-color: var(--secondary)
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app" class="flex">
+        <div id="navbar">
+            
+            <div id="nav-title" class="flex w-100">
+                <div>Username</div>
+                <div>👨‍🦳</div>
+            </div>
+            <div id="nav-item" v-for="(category,i) of categories" :key="category.id" @click="selectCategory(i)" :class="{'selected-item' : selected == i}">
+                {{category.title}}
+            </div>
+        
+        </div>
+        <div id="content">
+            <div v-if="selected != -1">
+                {{categories[selected].title}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    const app = new Vue({
+
+        el: "#app",
+        data(){
+            return {
+                categories : [
+                                {
+                                    id: 0,
+                                    title : 'To do',
+                                    color : null,
+                                    items: [],
+                                },
+                                {
+                                    id: 1,
+                                    title : 'Market',
+                                    color: null,
+                                    items: []
+                                },
+                                {
+                                    id: 2,
+                                    title : 'Important',
+                                    color : null,
+                                    items: []
+                                },
+                                {
+                                    id: 3,
+                                    title : 'Music',
+                                    color: null,
+                                    items: []
+                                }
+                            ],
+                
+                selected : -1,
+
+            }
+        },
+        methods:{
+
+            selectCategory(index){
+
+                this.selected = index;
+            }
+        }
+    })
+</script>
