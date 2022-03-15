@@ -6,15 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&display=swap');
+        </style>
+    <style>
         
         :root{
 
-            --primary : rgb(41, 51, 85);
+            --primary : rgb(113 82 188);
             --secondary : rgb(223, 215, 215);
+            --dark-primary : rgb(66 42 121);
+            --red : rgb(170 57 57);
         }
 
         *{
             margin: 0;
+            font-family: 'DM Sans', sans-serif;
         }
 
         html, body, #app{
@@ -61,6 +67,7 @@
 
         #nav-item:hover{
 
+            z-index: 98;
             cursor: pointer;
 
         }
@@ -73,11 +80,111 @@
             color: var(--primary);
         }
 
-        #content{
+        .content-light{
 
+            z-index: 99;
             width: 80%;
-            background-color: var(--secondary)
+            background-color: var(--secondary);
+            padding: 50px;
+            margin: 0 auto;
         }
+
+        .content-dark{
+
+            z-index: 99;
+            width: 80%;
+            background-color: var(--dark-primary);
+            color: var(--secondary);
+            padding: 50px;
+            margin: 0 auto;
+        }
+
+        #content-header{
+
+            text-align: center;
+            font-size: 35px;
+        }
+
+        ul{
+            padding: 0;
+        }
+
+        .task{
+
+            list-style-type: none;
+            margin: 30px 30px 0px 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        input[type=text]{
+            border: none;
+            background: none;
+            font: inherit;
+            outline: none;
+            color: inherit
+        }
+
+        input[type=checkbox]{
+
+            height: 25px;
+            width: 25px;
+            border: none;
+            line-height: 25px;
+            margin: 0 10px 0 0;
+        }
+
+        .add-btn{
+            display: flex;
+            justify-content: center;
+        }
+
+        button{
+
+            background-color: var(--primary);
+            color: var(--secondary);
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10%;
+            font-size: 18px;
+            display: inline;
+        }
+
+        .task-buttons{
+
+            display: flex;
+            align-items: center;
+        }
+
+        .danger-btn{
+
+            font-size: 14px;
+            padding: 8px;
+            background-color: var(--red)
+        }
+
+        #add-btn{
+
+            margin-top: 30px;
+        }
+
+        #add-category-btn{
+
+            z-index: 9999;
+            position: fixed;
+            left: 10px;
+            bottom: 10px;
+        }
+
+        #nm-btn{
+            z-index: 9999;
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+        }
+
     </style>
     <title>Document</title>
 </head>
@@ -86,7 +193,7 @@
         <div id="navbar">
             
             <div id="nav-title" class="flex w-100">
-                <div>Username</div>
+                <div>John Doe</div>
                 <div>👨‍🦳</div>
             </div>
             <div id="nav-item" v-for="(category,i) of categories" :key="category.id" @click="selectCategory(i)" :class="{'selected-item' : selected == i}">
@@ -94,12 +201,31 @@
             </div>
         
         </div>
-        <div id="content">
+        <div :class="nightmode ? 'content-dark' : 'content-light'">
             <div v-if="selected != -1">
-                {{categories[selected].title}}
+                <h1 id="content-header">{{categories[selected].title}}</h1>
+                <ul>
+                <li class="task" v-for="(item, i) of categories[selected].items">
+                    <input type="text" v-model="item.title"></input>
+                    <div class="task-buttons">
+                        <input type="checkbox" v-model="item.done">
+                        <button class="danger-btn" style="cursor:pointer" @click="deleteTask(i)">Delete</button>
+                    </div> 
+                </li>
+            </ul>
+                <div class="add-btn">
+                    <button id="add-btn" @click="addItem()">Add</button>
+                </div>
             </div>
         </div>
+        <button id="add-category-btn" @click="addCategory()">
+            ➕
+        </button>
+        <button id="nm-btn" @click="toggleNightMode()"> 
+            🌙
+        </button>
     </div>
+    
 </body>
 </html>
 <script>
@@ -113,7 +239,26 @@
                                     id: 0,
                                     title : 'To do',
                                     color : null,
-                                    items: [],
+                                    items: [
+                                        {
+                                            
+                                            type : 0,
+                                            title : "Read a book",
+                                            done : false,
+                                        },
+                                        {
+                                            
+                                            type : 1,
+                                            title : "Read two books",
+                                            done : false,
+                                        },
+                                        {
+                                            
+                                            type : 2,
+                                            title : "Read three books",
+                                            done : false,
+                                        }
+                                    ],
                                 },
                                 {
                                     id: 1,
@@ -136,6 +281,7 @@
                             ],
                 
                 selected : -1,
+                nightmode : true
 
             }
         },
@@ -144,7 +290,37 @@
             selectCategory(index){
 
                 this.selected = index;
+            },
+
+            addCategory(title = "Random title"){
+
+                this.categories.push({
+                                    title,
+                                    color: null,
+                                    items: [],
+                                    })
+            },
+
+            addItem(){
+
+                this.categories[this.selected].items.push({
+                                                        title : "New task",
+                                                        done : false
+                                                    })
             }
-        }
+            ,
+
+
+            deleteTask(index){
+
+                
+                this.categories[this.selected].items.splice(index, 1)
+            },
+
+            toggleNightMode(){
+
+                this.nightmode = !this.nightmode
+            }
+        },
     })
 </script>
