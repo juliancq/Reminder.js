@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,80 +8,79 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&display=swap');
-        </style>
+    </style>
     <style>
-        
-        :root{
+        :root {
 
-            --primary : rgb(113 82 188);
-            --secondary : rgb(223, 215, 215);
-            --dark-primary : rgb(66 42 121);
-            --red : rgb(170 57 57);
+            --primary: rgb(113 82 188);
+            --secondary: rgb(223, 215, 215);
+            --dark-primary: rgb(66 42 121);
+            --red: rgb(170 57 57);
         }
 
-        *{
+        * {
             margin: 0;
             font-family: 'DM Sans', sans-serif;
         }
 
-        html, body, #app{
+        html,
+        body,
+        #app {
             min-height: 100vh;
         }
 
-        .flex{
+        .flex {
 
             display: flex;
         }
 
-        .w-100{
+        .w-100 {
 
             width: 100%;
         }
 
-        #app{
-            
-        }
+        #app {}
 
-        #navbar{
-            
+        #navbar {
+
             width: 20%;
             background-color: var(--primary);
             display: flex;
             color: white;
-            flex-direction:column;
+            flex-direction: column;
             gap: 30px;
             align-items: center;
         }
 
-        #nav-title{
+        #nav-title {
 
             justify-content: space-around;
             padding: 50px 0 60px;
             font-size: 30px;
         }
 
-        #nav-item{
+        #nav-item {
             width: 100%;
             text-align: center;
             padding: 10px;
         }
 
-        #nav-item:hover{
+        #nav-item:hover {
 
             z-index: 98;
             cursor: pointer;
 
         }
 
-        .selected-item{
+        .selected-item {
             border-top-left-radius: 200px 200px;
-            border-bottom-left-radius:200px 200px;
+            border-bottom-left-radius: 200px 200px;
             transform: translateX(50px);
             background-color: var(--secondary);
             color: var(--primary);
         }
 
-        .content-light{
+        .content-light {
 
             z-index: 99;
             width: 80%;
@@ -89,7 +89,7 @@
             margin: 0 auto;
         }
 
-        .content-dark{
+        .content-dark {
 
             z-index: 99;
             width: 80%;
@@ -99,17 +99,18 @@
             margin: 0 auto;
         }
 
-        #content-header{
+        #content-header {
 
-            text-align: center;
+            display: flex;
+            justify-content: center;
             font-size: 35px;
         }
 
-        ul{
+        ul {
             padding: 0;
         }
 
-        .task{
+        .task {
 
             list-style-type: none;
             margin: 30px 30px 0px 30px;
@@ -118,15 +119,16 @@
             align-items: center;
         }
 
-        input[type=text]{
+        input[type=text] {
             border: none;
-            background: none;
+            background: inherit;
             font: inherit;
             outline: none;
-            color: inherit
+            color: inherit;
+            text-align: center;
         }
 
-        input[type=checkbox]{
+        input[type=checkbox] {
 
             height: 25px;
             width: 25px;
@@ -135,12 +137,12 @@
             margin: 0 10px 0 0;
         }
 
-        .add-btn{
+        .add-btn {
             display: flex;
             justify-content: center;
         }
 
-        button{
+        button {
 
             background-color: var(--primary);
             color: var(--secondary);
@@ -152,25 +154,25 @@
             display: inline;
         }
 
-        .task-buttons{
+        .task-buttons {
 
             display: flex;
             align-items: center;
         }
 
-        .danger-btn{
+        .danger-btn {
 
             font-size: 14px;
             padding: 8px;
             background-color: var(--red)
         }
 
-        #add-btn{
+        #add-btn {
 
             margin-top: 30px;
         }
 
-        #add-category-btn{
+        #add-category-btn {
 
             z-index: 9999;
             position: fixed;
@@ -178,149 +180,236 @@
             bottom: 10px;
         }
 
-        #nm-btn{
+        #right-bar {
             z-index: 9999;
             position: fixed;
             right: 10px;
             bottom: 10px;
         }
-
     </style>
     <title>Document</title>
 </head>
+
 <body>
     <div id="app" class="flex">
+
         <div id="navbar">
-            
             <div id="nav-title" class="flex w-100">
-                <div>John Doe</div>
-                <div>👨‍🦳</div>
+                <div>{{username}}</div>
+                <div>{{pfp}}</div>
             </div>
-            <div id="nav-item" v-for="(category,i) of categories" :key="category.id" @click="selectCategory(i)" :class="{'selected-item' : selected == i}">
+            <div id="nav-item" v-for="(category,i) of categories" :key="category.id"
+                :class="{'selected-item' : selected == i}" @click="selectCategory(i)">
+
                 {{category.title}}
             </div>
-        
+
+
         </div>
         <div :class="nightmode ? 'content-dark' : 'content-light'">
             <div v-if="selected != -1">
-                <h1 id="content-header">{{categories[selected].title}}</h1>
+                <h1 id="content-header">
+                    <input type="text" v-model="categories[selected].title">
+                </h1>
                 <ul>
-                <li class="task" v-for="(item, i) of categories[selected].items">
-                    <input type="text" v-model="item.title"></input>
-                    <div class="task-buttons">
-                        <input type="checkbox" v-model="item.done">
-                        <button class="danger-btn" style="cursor:pointer" @click="deleteTask(i)">Delete</button>
-                    </div> 
-                </li>
-            </ul>
+                    <li class="task" v-for="(item, i) of categories[selected].items" :key="i">
+                        <input type="text" v-model="item.title" @keyup.enter="addTask()" :ref="(i == categories[selected].items.length -1) ? 'last' : ''">
+                        <div class="task-buttons">
+                            <input type="checkbox" v-model="item.done">
+                            <button class="danger-btn" style="cursor:pointer" @click="deleteTask(i)">Delete</button>
+                        </div>
+                    </li>
+                </ul>
                 <div class="add-btn">
-                    <button id="add-btn" @click="addItem()">Add</button>
+                    <button id="add-btn" @click="addTask()">Add</button>
                 </div>
             </div>
+
         </div>
         <button id="add-category-btn" @click="addCategory()">
             ➕
         </button>
-        <button id="nm-btn" @click="toggleNightMode()"> 
-            🌙
-        </button>
+        <div id="right-bar">
+            <button v-if="selected != -1" @click="deleteCategory()">
+                ☠️
+            </button>
+            <button v-if="selected != -1" @click="configCategory()">
+                ⚙️
+            </button>
+            <button @click="toggleNightMode()">
+                🌙
+            </button>
+            <button @click="saveUser(userId)">
+                💾
+            </button>
+        </div>
+
     </div>
-    
+
 </body>
+
 </html>
 <script>
     const app = new Vue({
 
         el: "#app",
-        data(){
+        data() {
             return {
-                categories : [
-                                {
-                                    id: 0,
-                                    title : 'To do',
-                                    color : null,
-                                    items: [
-                                        {
-                                            
-                                            type : 0,
-                                            title : "Read a book",
-                                            done : false,
-                                        },
-                                        {
-                                            
-                                            type : 1,
-                                            title : "Read two books",
-                                            done : false,
-                                        },
-                                        {
-                                            
-                                            type : 2,
-                                            title : "Read three books",
-                                            done : false,
-                                        }
-                                    ],
-                                },
-                                {
-                                    id: 1,
-                                    title : 'Market',
-                                    color: null,
-                                    items: []
-                                },
-                                {
-                                    id: 2,
-                                    title : 'Important',
-                                    color : null,
-                                    items: []
-                                },
-                                {
-                                    id: 3,
-                                    title : 'Music',
-                                    color: null,
-                                    items: []
-                                }
-                            ],
-                
-                selected : -1,
-                nightmode : true
+                // username: "John Doe",
+                // pfp: "👨‍🦳",
+                // categories : [
+                //                 {
+                //                     id: 0,
+                //                     title : 'To do',
+                //                     color : null,
+                //                     items: [
+                //                         {
+
+                //                             type : 0,
+                //                             title : "Read a book",
+                //                             done : false,
+                //                         },
+                //                         {
+
+                //                             type : 1,
+                //                             title : "Read two books",
+                //                             done : false,
+                //                         },
+                //                         {
+
+                //                             type : 2,
+                //                             title : "Read three books",
+                //                             done : false,
+                //                         }
+                //                     ],
+                //                     editable: false
+                //                 },
+                //                 {
+                //                     id: 1,
+                //                     title : 'Market',
+                //                     color: null,
+                //                     items: [],
+                //                     editable: false
+                //                 },
+                //                 {
+                //                     id: 2,
+                //                     title : 'Important',
+                //                     color : null,
+                //                     items: [],
+                //                     editable: false
+                //                 },
+                //                 {
+                //                     id: 3,
+                //                     title : 'Music',
+                //                     color: null,
+                //                     items: [],
+                //                     editable: false
+                //                 }
+                //             ],
+                username : "",
+                userId: 2327,
+                categories: [],
+                selected: -1,
+                nightmode: true
+
 
             }
         },
-        methods:{
+        methods: {
 
-            selectCategory(index){
+            selectCategory(index) {
 
+                this.categories[index].editable = false;
                 this.selected = index;
             },
 
-            addCategory(title = "Random title"){
+            addCategory(title = "Random title") {
 
                 this.categories.push({
-                                    title,
-                                    color: null,
-                                    items: [],
-                                    })
+                    title,
+                    color: null,
+                    items: [],
+                    editable: false
+                })
             },
 
-            addItem(){
+            setEditable(index) {
+                this.categories[index].title = "";
+                this.categories[index].editable = true;
+            },
+
+            configCategory() {
+
+                alert("...");
+            },
+
+            deleteCategory() {
+
+                if (confirm("Are u Sure?")) this.categories.splice(this.selected, 1)
+                this.selected = -1;
+
+            },
+
+
+            addTask() {
 
                 this.categories[this.selected].items.push({
-                                                        title : "New task",
-                                                        done : false
-                                                    })
-            }
-            ,
-
-
-            deleteTask(index){
-
+                    title: "New task",
+                    done: false
+                })
+                this.$forceUpdate();
                 
-                this.categories[this.selected].items.splice(index, 1)
+                setTimeout(()=>{
+                    this.$refs.last[0].focus()
+                }, 0)      
             },
 
-            toggleNightMode(){
+            deleteTask(index) {
+
+
+                this.categories[this.selected].items.splice(index, 1)
+                this.$forceUpdate();
+            },
+
+            toggleNightMode() {
 
                 this.nightmode = !this.nightmode
+            },
+
+
+            loadUser(userId) {
+
+                let data = this.GETData(userId)
+                console.log(data);
+                this.categories = data?.categories
+                this.username = data?.username;
+                this.pfp = data?.pfp;
+            },
+
+            saveUser(userId) {
+
+                this.POSTData(userId, {
+                    categories: this.categories,
+                    username: this.username,
+                    pfp: this.pfp
+                })
+            },
+
+            POSTData(userId, data) {
+
+                localStorage.setItem(userId, JSON.stringify(data));
+            },
+
+            GETData(userId) {
+
+                return JSON.parse(localStorage.getItem(userId) || "{}")
             }
         },
+        created() {
+
+            this.loadUser(this.userId);
+            console.log("created")
+            this.saveUser(this.userId)
+        }
     })
 </script>
