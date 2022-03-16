@@ -9,184 +9,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&display=swap');
     </style>
-    <style>
-        :root {
-
-            --primary: rgb(113 82 188);
-            --secondary: rgb(223, 215, 215);
-            --dark-primary: rgb(66 42 121);
-            --red: rgb(170 57 57);
-        }
-
-        * {
-            margin: 0;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        html,
-        body,
-        #app {
-            min-height: 100vh;
-        }
-
-        .flex {
-
-            display: flex;
-        }
-
-        .w-100 {
-
-            width: 100%;
-        }
-
-        #app {}
-
-        #navbar {
-
-            width: 20%;
-            background-color: var(--primary);
-            display: flex;
-            color: white;
-            flex-direction: column;
-            gap: 30px;
-            align-items: center;
-        }
-
-        #nav-title {
-
-            justify-content: space-around;
-            padding: 50px 0 60px;
-            font-size: 30px;
-        }
-
-        #nav-item {
-            width: 100%;
-            text-align: center;
-            padding: 10px;
-        }
-
-        #nav-item:hover {
-
-            z-index: 98;
-            cursor: pointer;
-
-        }
-
-        .selected-item {
-            border-top-left-radius: 200px 200px;
-            border-bottom-left-radius: 200px 200px;
-            transform: translateX(50px);
-            background-color: var(--secondary);
-            color: var(--primary);
-        }
-
-        .content-light {
-
-            z-index: 99;
-            width: 80%;
-            background-color: var(--secondary);
-            padding: 50px;
-            margin: 0 auto;
-        }
-
-        .content-dark {
-
-            z-index: 99;
-            width: 80%;
-            background-color: var(--dark-primary);
-            color: var(--secondary);
-            padding: 50px;
-            margin: 0 auto;
-        }
-
-        #content-header {
-
-            display: flex;
-            justify-content: center;
-            font-size: 35px;
-        }
-
-        ul {
-            padding: 0;
-        }
-
-        .task {
-
-            list-style-type: none;
-            margin: 30px 30px 0px 30px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        input[type=text] {
-            border: none;
-            background: inherit;
-            font: inherit;
-            outline: none;
-            color: inherit;
-            text-align: center;
-        }
-
-        input[type=checkbox] {
-
-            height: 25px;
-            width: 25px;
-            border: none;
-            line-height: 25px;
-            margin: 0 10px 0 0;
-        }
-
-        .add-btn {
-            display: flex;
-            justify-content: center;
-        }
-
-        button {
-
-            background-color: var(--primary);
-            color: var(--secondary);
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 10%;
-            font-size: 18px;
-            display: inline;
-        }
-
-        .task-buttons {
-
-            display: flex;
-            align-items: center;
-        }
-
-        .danger-btn {
-
-            font-size: 14px;
-            padding: 8px;
-            background-color: var(--red)
-        }
-
-        #add-btn {
-
-            margin-top: 30px;
-        }
-
-        #add-category-btn {
-
-            z-index: 9999;
-            position: fixed;
-            left: 10px;
-            bottom: 10px;
-        }
-
-        #right-bar {
-            z-index: 9999;
-            position: fixed;
-            right: 10px;
-            bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <title>Document</title>
 </head>
 
@@ -212,16 +35,16 @@
                     <input type="text" v-model="categories[selected].title">
                 </h1>
                 <ul>
-                    <li class="task" v-for="(item, i) of categories[selected].items" :key="i">
-                        <input type="text" v-model="item.title" @keyup.enter="addTask()" :ref="(i == categories[selected].items.length -1) ? 'last' : ''">
-                        <div class="task-buttons">
+                    <li class="item" v-for="(item, i) of categories[selected].items" :key="i">
+                        <input type="text" v-model="item.title" @keyup.enter="addItem()" :ref="(i == categories[selected].items.length -1) ? 'last' : ''">
+                        <div class="item-buttons">
                             <input type="checkbox" v-model="item.done">
-                            <button class="danger-btn" style="cursor:pointer" @click="deleteTask(i)">Delete</button>
+                            <button class="danger-btn" style="cursor:pointer" @click="deleteItem(i)">Delete</button>
                         </div>
                     </li>
                 </ul>
                 <div class="add-btn">
-                    <button id="add-btn" @click="addTask()">Add</button>
+                    <button id="add-btn" @click="addItem()">Add</button>
                 </div>
             </div>
             <div v-else>
@@ -360,10 +183,10 @@
             },
 
 
-            addTask() {
+            addItem() {
 
                 this.categories[this.selected].items.push({
-                    title: "New task",
+                    title: "New item",
                     done: false
                 })
                 this.$forceUpdate();
@@ -373,7 +196,7 @@
                 }, 0)      
             },
 
-            deleteTask(index) {
+            deleteItem(index) {
 
 
                 this.categories[this.selected].items.splice(index, 1)
