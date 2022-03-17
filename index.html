@@ -18,8 +18,8 @@
 
         <div id="navbar">
             <div id="nav-title" class="flex w-100">
-                <div>{{username}}</div>
-                <div>{{pfp}}</div>
+                <input type="text" v-model="username" maxlength="10" style="width: 75%;">
+                <input type="text" v-model="pfp"  maxlength="1" style="width: 25%;">
             </div>
             <div id="nav-item" v-for="(category,i) of categories" :key="category.id"
                 :class="{'selected-item' : selected == i}" @click="selectCategory(i)">
@@ -85,64 +85,12 @@
         el: "#app",
         data() {
             return {
-                // username: "John Doe",
-                // pfp: "👨‍🦳",
-                // categories : [
-                //                 {
-                //                     id: 0,
-                //                     title : 'To do',
-                //                     color : null,
-                //                     items: [
-                //                         {
-
-                //                             type : 0,
-                //                             title : "Read a book",
-                //                             done : false,
-                //                         },
-                //                         {
-
-                //                             type : 1,
-                //                             title : "Read two books",
-                //                             done : false,
-                //                         },
-                //                         {
-
-                //                             type : 2,
-                //                             title : "Read three books",
-                //                             done : false,
-                //                         }
-                //                     ],
-                //                     editable: false
-                //                 },
-                //                 {
-                //                     id: 1,
-                //                     title : 'Market',
-                //                     color: null,
-                //                     items: [],
-                //                     editable: false
-                //                 },
-                //                 {
-                //                     id: 2,
-                //                     title : 'Important',
-                //                     color : null,
-                //                     items: [],
-                //                     editable: false
-                //                 },
-                //                 {
-                //                     id: 3,
-                //                     title : 'Music',
-                //                     color: null,
-                //                     items: [],
-                //                     editable: false
-                //                 }
-                //             ],
-                username : "",
-                userId: 2327,
+                username: "John Doe",
+                pfp: "👨‍🦳",
+                userId: 0,
                 categories: [],
                 selected: -1,
                 nightmode: true
-
-
             }
         },
         methods: {
@@ -212,10 +160,12 @@
             loadUser(userId) {
 
                 let data = this.GETData(userId)
-                console.log(data);
-                this.categories = data?.categories
-                this.username = data?.username;
-                this.pfp = data?.pfp;
+
+                if (Object.keys(data).length == 0) return 
+                
+                this.categories = data.categories
+                this.username = data.username;
+                this.pfp = data.pfp;
             },
 
             saveUser(userId) {
@@ -225,6 +175,8 @@
                     username: this.username,
                     pfp: this.pfp
                 })
+
+                alert("Saved :)")
             },
 
             POSTData(userId, data) {
@@ -240,8 +192,7 @@
         created() {
 
             this.loadUser(this.userId);
-            console.log("created")
-            this.saveUser(this.userId)
         }
+        
     })
 </script>
