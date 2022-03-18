@@ -6,11 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <link rel="icon" href="./assets/bandera-a-cuadros.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&display=swap');
     </style>
     <link rel="stylesheet" href="styles.css">
-    <title>Document</title>
+    <title>ReminderJs</title>
 </head>
 
 <body>
@@ -19,7 +20,7 @@
         <div id="navbar">
             <div id="nav-title" class="flex w-100">
                 <input type="text" v-model="username" maxlength="10" style="width: 75%;">
-                <input type="text" v-model="pfp"  maxlength="1" style="width: 25%;">
+                <input type="text" v-model="pfp"  maxlength="3" style="width: 25%;">
             </div>
             <div id="nav-item" v-for="(category,i) of categories" :key="category.id"
                 :class="{'selected-item' : selected == i}" @click="selectCategory(i)">
