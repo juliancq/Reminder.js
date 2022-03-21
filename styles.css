@@ -122,6 +122,7 @@ input[type=checkbox] {
     border: none;
     line-height: 25px;
     margin: 0 10px 0 0;
+    accent-color: var(--primary);
 }
 
 .add-btn {
